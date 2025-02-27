@@ -1,104 +1,81 @@
 import './App.css';
+import './logo.svg';
 import { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, registerables } from 'chart.js';
+import Knob from './components/knob/knob';
+import WeeklyChart from './components/weekly-chart/weekly-chart';
+import MonthlyChart from './components/monthly-chart/monthly-chart';
+import Api from './Api';
+import Price from './helpers/PriceHelper';
+import Header from './components/header/header';
 ChartJS.register(...registerables);
-// import logo from './logo.svg';
 
-declare global {
-  interface Window {
-    Chart?: any;
-  }
-}
-
-// const range = document.getElementById("range");
-// const knobCircle = document.getElementById("knob-circle");
-// const knobValue = document.getElementById("knob-value");
-// const weeklyChart = document.querySelector("#weeklyChart");
-// const monthlyChart = document.querySelector("#monthlyChart");
-
-function App() {
-  const [value, setValue] = useState(0);
+export default function App() {
+  const [totalWeekValue, setTotalWeekValue] = useState(0);
+  const [totalMonthValue, setTotalMonthValue] = useState(0);
+  const [mainGoal, setMainGoal] = useState(null);
+  const [weeklyGoals, setWeeklyGoals] = useState([]);
+  const [monthlyGoals, setMonthlyGoals] = useState([]);
+  const [bestDay, setBestDay] = useState(null);
 
   useEffect(() => {
-    // updateKnob();
-    // buildWeeklyChart();
-    // buildMonthlyChart();
+    GetGoalData();
   }, []);
 
+  async function GetGoalData() {
+    var result = await Api.GetMainGoals(123);
+    if (!result)
+      return;
 
-  function updateKnob() {
-    // if (!knobCircle)
-    //   return;
+    setMainGoal(result);
 
-    // const radius = 80;
-    // const circumference = 2 * Math.PI * radius;
-    // knobCircle.style.strokeDasharray = circumference.toString();
+    var weekGoals = await Api.GetWeekGoals(123);
+    setWeeklyGoals(weekGoals);
 
-    // const value = range.getAttribute("value");
-    // const offset = circumference - (Number(value) / 100) * circumference;
-    // knobCircle.style.strokeDashoffset = offset.toString();
-    // knobValue.textContent = value + "%";
-  }
-  
-  function getMonthDayCount() {
-    var date = new Date();
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    let totalWeekValue = weekGoals.map(item => item.value).reduce((prev, next) => prev + next);
+    setTotalWeekValue(totalWeekValue);
+
+    var monthGoals = await Api.GetMonthGoals(123);
+    setMonthlyGoals(monthGoals);
+
+    let totalMonthValue = monthGoals.map(item => item.value).reduce((prev, next) => prev + next);
+    setTotalMonthValue(totalMonthValue);
+
+    let bestDay = { value: 0 };
+    monthGoals.forEach((item) => bestDay = item.value > bestDay.value ? item : bestDay);
+    setBestDay(bestDay);
   }
 
   return (
     <div className="container">
-      Gerenciador de Meta
-      <div className="knob-container">
-        <svg width="200" height="200" viewBox="0 0 200 200">
-          <circle id="knob-background" cx="100" cy="100" r="80" stroke="#ddd" strokeWidth="40" fill="none"></circle>
-          <circle cx="100" cy="100" r="80" stroke="#9ad0f5" strokeWidth="40" fill="none" strokeDasharray="630" strokeDashoffset="0" id="knob-circle" transform="rotate(-90 100 100)"></circle>
-        </svg>
-        <input type="range" id="range" min="0" max="100" value="50" readOnly />
-        <div className="knob-value" id="knob-value">50%</div>
-      </div>
-      <div className="chart">
-        <Bar
-          data={{
-            labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-            datasets: [{
-              label: 'Monitoramento semanal',
-              data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100) + 1),
-              borderWidth: 0
-            }]
-          }}></Bar>
-      </div>
+      <Header />
+      <Knob goal={mainGoal} value={totalMonthValue} />
+      <WeeklyChart goals={weeklyGoals} />
       <div>
         <span>Informações</span>
         <div>
           <span>Metas</span>
-          <span>Prata: R$ 150.000,00</span>
-          <span>Ouro: R$ 150.000,00</span>
-          <span>Diamante: R$ 150.000,00</span>
         </div>
         <div>
-          Acumulado semanal: R$ 25.350,23
+          <span>Prata: R$ {Price(mainGoal?.silver)}</span>
         </div>
         <div>
-          Acumulado mensal: R$ 25.350,23
+          <span>Ouro: R$ {Price(mainGoal?.gold)}</span>
         </div>
         <div>
-          Melhor dia de vendas: 15
+          <span>Diamante: R$ {Price(mainGoal?.diamond)}</span>
+        </div>
+        <div>
+          Acumulado semanal: R$ {Price(totalWeekValue)}
+        </div>
+        <div>
+          Acumulado mensal: R$ {Price(totalMonthValue)}
+        </div>
+        <div>
+          Melhor dia de vendas: {new Date(bestDay?.date).getDate()}
         </div>
       </div>
-      <div className="chart">
-        <Bar
-          data={{
-            labels: Array.from({ length: getMonthDayCount() }, (_, index) => index + 1),
-            datasets: [{
-              label: 'Monitoramento semanal',
-              data: Array.from({ length: getMonthDayCount() }, () => Math.floor(Math.random() * 100) + 1),
-              borderWidth: 0
-            }]
-          }}></Bar>
-      </div>
+      <MonthlyChart goals={monthlyGoals} />
     </div>
   );
 }
-
-export default App;
