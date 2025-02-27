@@ -1,9 +1,9 @@
+import './App.css';
 import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, registerables } from 'chart.js';
 ChartJS.register(...registerables);
 // import logo from './logo.svg';
-// import './App.css';
 
 declare global {
   interface Window {
