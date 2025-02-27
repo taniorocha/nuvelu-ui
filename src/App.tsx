@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, registerables } from 'chart.js';
 ChartJS.register(...registerables);
@@ -7,7 +7,7 @@ ChartJS.register(...registerables);
 
 declare global {
   interface Window {
-      Chart?: any;
+    Chart?: any;
   }
 }
 
@@ -40,55 +40,10 @@ function App() {
     // knobCircle.style.strokeDashoffset = offset.toString();
     // knobValue.textContent = value + "%";
   }
-
-  function buildWeeklyChart() {
-    var week_days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
-    var values = Array.from({ length: 7 }, () => Math.floor(Math.random() * 100) + 1); // Valores aleatórios entre 1 e 100
-
-    // new Bar({
-    //   type: 'bar',
-    //   data: {
-    //     labels: week_days,
-    //     datasets: [{
-    //       label: 'Monitoramento semanal',
-    //       data: values,
-    //       borderWidth: 0
-    //     }]
-    //   },
-    //   options: {
-    //     scales: {
-    //       y: {
-    //         beginAtZero: true
-    //       }
-    //     }
-    //   }
-    // });
-  }
-
-  function buildMonthlyChart() {
-    // var date = new Date();
-    // var month_days_count = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    // var month_days = Array.from({ length: month_days_count }, (_, index) => index + 1);
-    // var values = Array.from({ length: month_days_count }, () => Math.floor(Math.random() * 100) + 1); // Valores aleatórios entre 1 e 100
-
-    // new window.Chart(monthlyChart, {
-    //   type: 'bar',
-    //   data: {
-    //     labels: month_days,
-    //     datasets: [{
-    //       label: 'Monitoramento mensal',
-    //       data: values,
-    //       borderWidth: 0
-    //     }]
-    //   },
-    //   options: {
-    //     scales: {
-    //       y: {
-    //         beginAtZero: true
-    //       }
-    //     }
-    //   }
-    // });
+  
+  function getMonthDayCount() {
+    var date = new Date();
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   }
 
   return (
@@ -103,15 +58,15 @@ function App() {
         <div className="knob-value" id="knob-value">50%</div>
       </div>
       <div className="chart">
-        <Bar 
+        <Bar
           data={{
-          labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-          datasets: [{
-            label: 'Monitoramento semanal',
-            data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100) + 1),
-            borderWidth: 0
-          }]
-      }}></Bar>
+            labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+            datasets: [{
+              label: 'Monitoramento semanal',
+              data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 100) + 1),
+              borderWidth: 0
+            }]
+          }}></Bar>
       </div>
       <div>
         <span>Informações</span>
@@ -132,7 +87,15 @@ function App() {
         </div>
       </div>
       <div className="chart">
-        {/* <canvas id="monthlyChart"></canvas> */}
+        <Bar
+          data={{
+            labels: Array.from({ length: getMonthDayCount() }, (_, index) => index + 1),
+            datasets: [{
+              label: 'Monitoramento semanal',
+              data: Array.from({ length: getMonthDayCount() }, () => Math.floor(Math.random() * 100) + 1),
+              borderWidth: 0
+            }]
+          }}></Bar>
       </div>
     </div>
   );
