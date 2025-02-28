@@ -28,6 +28,7 @@ header {
 .menu {
     position: fixed;
     width: 0px;
+    max-width: 500px;
     height: 100%;
     top: 0;
     z-index: 99999;
@@ -145,4 +146,22 @@ header {
     font-weight: 500;
     padding: 15px 10px;
     white-space: nowrap;
+}
+
+.swal2-input {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+#swal-select {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.swal2-select {
+    /* display: flex; */
+    width: 100%;
+    border: 1px solid #d9d9d9;
+    border-radius: .1875em;
 }

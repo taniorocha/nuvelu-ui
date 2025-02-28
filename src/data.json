@@ -4,7 +4,15 @@
             "id": 123,
             "name": "Jurema Silva",
             "username": "jurema",
-            "password": "123"
+            "password": "123",
+            "cover": "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        },
+        {
+            "id": 1234,
+            "name": "Tanio Rocha",
+            "username": "tanio",
+            "password": "123",
+            "cover": "https://cdn-icons-png.flaticon.com/512/149/149071.png"
         }
     ],
     "main_goals": [

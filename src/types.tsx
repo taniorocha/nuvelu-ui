@@ -13,3 +13,11 @@ export interface DailyGoal {
     value: number;
     date: Date;
 }
+
+export interface User {
+    id: number;
+    name: string;
+    username: string;
+    password: string;
+    cover: string;
+}

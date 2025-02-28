@@ -1,0 +1,35 @@
+.inline-cards {
+    display: flex;
+    gap: 10px;
+}
+
+.inline-cards .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 33.33%;
+}
+
+.goal-card-silver span:first-child {
+    color: #afafaf;
+    margin-bottom: 5px;
+}
+
+.goal-card-gold span:first-child {
+    color: #ff9b00;
+    margin-bottom: 5px;
+}
+
+.goal-card-diamond span:first-child {
+    color: #7adae3;
+    margin-bottom: 5px;
+}
+
+.goal-value {
+    font-size: 15px;
+}
+
+.daily-value {
+    font-size: 13px;
+    color: #8f8f8f;
+}

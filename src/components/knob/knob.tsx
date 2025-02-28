@@ -29,33 +29,33 @@ export default function Knob(props: Props) {
         const value = range.getAttribute("value");
         const offset = circumference - (Number(value) / 100) * circumference;
         knobCircle.style.strokeDashoffset = offset.toString();
-        knobValue.textContent = value + "%";
+        knobValue.textContent = (value === "NaN" ? "0" : value) + "%";
     }
 
     return (
         <div className="knob-container">
             <svg width="200" height="200" viewBox="0 0 200 200">
-                <circle 
-                    id="knob-background" 
-                    cx="100" 
-                    cy="100" 
-                    r="80" 
-                    stroke="#ddd" 
-                    strokeWidth="40" 
-                    fill="none" 
+                <circle
+                    id="knob-background"
+                    cx="100"
+                    cy="100"
+                    r="80"
+                    stroke="#ddd"
+                    strokeWidth="40"
+                    fill="none"
                 />
-                <circle 
-                    id={`knob-circle-${props.id}`} 
-                    className="knob-circle" 
-                    cx="100" 
-                    cy="100" 
-                    r="80" 
+                <circle
+                    id={`knob-circle-${props.id}`}
+                    className="knob-circle"
+                    cx="100"
+                    cy="100"
+                    r="80"
                     stroke={props.color}
-                    strokeWidth="40" 
-                    fill="none" 
-                    strokeDasharray="630" 
-                    strokeDashoffset="0" 
-                    transform="rotate(-90 100 100)" 
+                    strokeWidth="40"
+                    fill="none"
+                    strokeDasharray="630"
+                    strokeDashoffset="0"
+                    transform="rotate(-90 100 100)"
                 />
             </svg>
             <input

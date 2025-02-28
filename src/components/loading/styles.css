@@ -1,0 +1,41 @@
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.loading .loading-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #292929;
+    z-index: 99;
+    opacity: 0.5;
+}
+
+.loading.show {
+    display: flex;
+}
+
+.spinner {
+    border: 6px solid #7adae3;
+    border-top-color: transparent;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    animation: is-rotating 1s infinite;
+    z-index: 100;
+}
+
+@keyframes is-rotating {
+    to {
+        transform: rotate(1turn);
+    }
+}

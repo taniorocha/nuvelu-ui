@@ -1,12 +1,14 @@
 import Data from './data.json';
-import { Goal } from './types';
+import { DailyGoal, Goal } from './types';
 
 export default new class Api {
     async Login(username: string, password: string) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
         return Data.users.find(x => x.username == username && x.password == password);
     }
 
     async GetMainGoals(userId: number) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
         const currentDate = new Date().toJSON();
         const date_str = currentDate.substring(0, 7);
         return Data.main_goals.find(x => x.user_id === userId && x.date === date_str);
@@ -42,8 +44,12 @@ export default new class Api {
     }
 
     async SetGoal(goal: Goal) {
-        const { silver, gold, diamond } = goal;
-        if (!silver || !gold || !diamond)
-            return;
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        console.log("Cadastrando meta mensal:", goal);
+    }
+
+    async SetDailyGoal(dailyGoal: DailyGoal) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        console.log("Lançamento diário:", dailyGoal);
     }
 }
