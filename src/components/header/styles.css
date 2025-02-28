@@ -5,12 +5,11 @@ header {
 .top-header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
     padding: 10px;
 }
 
 .top-header button {
-    padding: 5px;
     background: none;
     border: none;
     display: flex;
@@ -23,6 +22,7 @@ header {
 
 .top-header h1 {
     font-size: 30px;
+    font-weight: 400;
 }
 
 .menu {
@@ -56,7 +56,7 @@ header {
     background: #fff;
     z-index: 99999;
     border: 1px #f5f5f5 solid;
-    box-shadow: 2px 0px 20px 0px #afafaf;
+    box-shadow: 2px 0px 6px 0px #00000040;
     padding: 20px 10px;
 }
 
@@ -87,11 +87,14 @@ header {
     white-space: nowrap;
 }
 .user-name h2 {
+    font-size: 23px;
+    font-weight: 600;
     line-height: 25px;
 }
 
 .user-name span {
     color: #a5a5a5;
+    font-size: 15px;
 }
 
 .back-button button {
@@ -119,6 +122,7 @@ header {
     width: 100%;
     gap: 15px;
     font-size: 16px;
+    font-weight: 500;
     padding: 15px 10px;
     white-space: nowrap;
 }
@@ -138,6 +142,7 @@ header {
     width: 100%;
     gap: 15px;
     font-size: 16px;
+    font-weight: 500;
     padding: 15px 10px;
     white-space: nowrap;
 }

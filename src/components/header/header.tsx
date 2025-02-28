@@ -13,7 +13,7 @@ export default function Header() {
                 <button onClick={() => setMenuActive(true)}>
                     <span className="material-symbols-outlined">menu</span>
                 </button>
-                <h1>Gerenciador de Meta</h1>
+                <h1>NovelU | Minha Meta</h1>
             </div>
             <div className={`menu${menuActive ? " active" : ""}`}>
                 <div className="menu-content">
@@ -36,19 +36,19 @@ export default function Header() {
                     <div className="menu-options">
                         <ul>
                             <li>
-                                <button>
+                                <button onClick={() => setMenuActive(false)}>
                                     <span className="material-symbols-outlined">home</span>
                                     Início
                                 </button>
                             </li>
                             <li>
-                                <button>
+                                <button onClick={() => setMenuActive(false)}>
                                     <span className="material-symbols-outlined">ads_click</span>
                                     Ajustar Meta
                                 </button>
                             </li>
                             <li>
-                                <button>
+                                <button onClick={() => setMenuActive(false)}>
                                     <span className="material-symbols-outlined">rocket_launch</span>
                                     Lançamento
                                 </button>
@@ -68,7 +68,7 @@ export default function Header() {
                         </ul>
                     </div>
                     <div className="menu-logout">
-                        <button>
+                        <button onClick={() => setMenuActive(false)}>
                             <span className="material-symbols-outlined">logout</span>
                             Sair
                         </button>
