@@ -1,9 +1,11 @@
 import { createContext, useContext, useState } from "react";
 import { User } from "../types";
+import { getUserByToken } from "../helpers/token-helper";
+import { LOCAL_STORAGE_TOKEN_NAME } from "../constanst";
 
 export type AuthContextProps = {
     user: User | null;
-    setAuth: (authUser: User | null) => void;
+    setAuth: (token: string | null) => void;
     getToken: () => Promise<string | null>;
 }
 
@@ -12,19 +14,26 @@ const AuthContext = createContext({} as AuthContextProps);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
 
-    async function setAuth(authUser: User | null) {
-        if (!authUser) {
-            localStorage.removeItem("token");
+    async function setAuth(token: string | null) {
+        if (!token) {
+            localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
             setUser(null);
             return;
         }
 
-        setUser(authUser);
-        localStorage.setItem('token', `${authUser?.username}%%${authUser?.password}`);
+        var user = getUserByToken(token);
+        if (!user) {
+            localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
+            setUser(null);
+            return;
+        }
+
+        setUser(user);
+        localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, token);
     }
 
     async function getToken() {
-        return localStorage.getItem('token');
+        return localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
     }
 
     return (

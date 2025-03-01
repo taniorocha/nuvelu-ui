@@ -1,55 +1,97 @@
-import Data from './data.json';
-import { DailyGoal, Goal } from './types';
+import { LOCAL_STORAGE_TOKEN_NAME, URL_API } from './constanst';
+import { getDatesOfMonth, getDatesOfWeek } from './helpers/date-helper';
+import { DailyValue, Goal, ValueResult } from './types';
 
 export default new class Api {
     async Login(username: string, password: string) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        return Data.users.find(x => x.username == username && x.password == password);
+        return await fetch(`${URL_API}/users/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password })
+        }).then(x => x.status === 200 ? x.json() : null);
     }
 
-    async GetMainGoals(userId: number) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
+    async CheckToken(token: string) {
+        return await fetch(`${URL_API}/check/token`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            }
+        }).then(x => x.status === 200 ? true : false);
+    }
+
+    async GetGoals() {
         const currentDate = new Date().toJSON();
         const date_str = currentDate.substring(0, 7);
-        return Data.main_goals.find(x => x.user_id === userId && x.date === date_str);
+
+        const result = await fetch(`${URL_API}/goals`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)
+            },
+        }).then(x => x.status === 200 ? x.json() : null);
+        if (!result)
+            return [];
+
+        return result.goals.find((x: Goal) => x.date === date_str);
     }
 
-    async GetWeekGoals(userId: number) {
-        const currentDate = new Date();
-        const currentWeekDay = currentDate.getDay(); // 0 to 6
+    async GetValues(): Promise<ValueResult> {
+        const result = await fetch(`${URL_API}/values`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)
+            },
+        }).then(x => x.status === 200 ? x.json() : null);
+        if (!result)
+            return { monthly: [], weekly: [] };
 
-        // Calcula a diferença de dias para o início da semana (segunda-feira)
-        const firstWeekDay = new Date(currentDate);
-        firstWeekDay.setDate(currentDate.getDate() - currentWeekDay + 1); // Ajusta para segunda-feira
-
-        // Calcula o fim da semana (domingo)
-        const lastWeekDay = new Date(firstWeekDay);
-        lastWeekDay.setDate(firstWeekDay.getDate() + 6); // Ajusta para domingo
-
-        return Data.daily_goals.filter(item => {
-            const data = new Date(item.date); // Converte a string para objeto Date
-            return data >= firstWeekDay && data <= lastWeekDay && item.user_id === userId;
+        const weeklyList = getDatesOfWeek().map((date: Date) => {
+            var value = result.values.find((item: DailyValue) =>
+                new Date(item.date).onlyDate().getTime() === date.onlyDate().getTime());
+            if (value)
+                return value;
+            else
+                return { date: date, value: 0 } as DailyValue
         });
-    }
 
-    async GetMonthGoals(userId: number) {
-        const currentDate = new Date();
-        const curentMonth = currentDate.getMonth();
-        const currentYear = currentDate.getFullYear();
-
-        return Data.daily_goals.filter(item => {
-            const data = new Date(item.date);
-            return data.getMonth() === curentMonth && data.getFullYear() === currentYear && item.user_id === userId;
+        const monthlyList = getDatesOfMonth().map((date: Date) => {
+            var value = result.values.find((item: DailyValue) => 
+                new Date(item.date).onlyDate().getTime() === date.onlyDate().getTime());
+            if (value)
+                return value;
+            else
+                return { date: date, value: 0 } as DailyValue
         });
+
+        return {
+            monthly: monthlyList,
+            weekly: weeklyList
+        }
     }
 
     async SetGoal(goal: Goal) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        console.log("Cadastrando meta mensal:", goal);
+        return await fetch(`${URL_API}/goals`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)
+            },
+            body: JSON.stringify(goal)
+        }).then(x => x.status === 200 || x.status === 201 ? true : false);
     }
 
-    async SetDailyGoal(dailyGoal: DailyGoal) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        console.log("Lançamento diário:", dailyGoal);
+    async SetDailyValue(dailyValue: DailyValue) {
+        return await fetch(`${URL_API}/values`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)
+            },
+            body: JSON.stringify(dailyValue)
+        }).then(x => x.status === 200 || x.status === 201 ? true : false);
     }
 }

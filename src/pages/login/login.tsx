@@ -28,7 +28,7 @@ export default function Login() {
             return;
         }
 
-        setAuth(result);
+        setAuth(result.token);
         setLoading(false);
         navigate("/home");
     }
@@ -36,12 +36,12 @@ export default function Login() {
     return (
         <div className="login-container">
             <div className="login-content">
-                <div className="logo">
-                    <div className="logo-img">
+                <div className="login-logo">
+                    <div className="login-logo-img">
                         <img src="favicon.png" alt="" />
                     </div>
                 </div>
-                <div className="logo-info">
+                <div className="login-logo-info">
                     <div>
                         <h1>NuveLu</h1>
                         <span>GOAL ANALYSIS</span>

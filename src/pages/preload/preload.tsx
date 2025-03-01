@@ -2,7 +2,6 @@ import "./styles.css";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/auth-context";
-import { User } from "../../types";
 import Api from "../../Api";
 
 export default function Preload() {
@@ -19,19 +18,15 @@ export default function Preload() {
             return;
         }
 
-        // here is just an example, if the token was a JWT, it cold be just sent to the refresh endpoint to get a newer one
-        let username = token.split("%%")[0];
-        let password = token.split("%%")[1];
-
-        const result: User = await Api.Login(username, password);
+        const result = await Api.CheckToken(token);
         if (!result) {
             setAuth(null);
             setLoginChecked(true);
             navigate("/login", { replace: true });
             return;
         }
-
-        setAuth(result);
+  
+        setAuth(token);
         setLoginChecked(true);
         navigate("/home", { replace: true });
     }

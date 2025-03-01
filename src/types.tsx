@@ -1,23 +1,28 @@
 export interface Goal {
-    id: number;
-    user_id: number;
+    id: string;
+    user_id: string;
     silver: number;
     gold: number;
     diamond: number;
     date: string;
 }
 
-export interface DailyGoal {
-    id: number;
-    user_id: number;
+export interface DailyValue {
+    id: string;
+    user_id: string;
     value: number;
     date: Date;
 }
 
 export interface User {
-    id: number;
+    id: string;
     name: string;
     username: string;
     password: string;
     cover: string;
+}
+
+export interface ValueResult {
+    monthly: DailyValue[];
+    weekly: DailyValue[];
 }

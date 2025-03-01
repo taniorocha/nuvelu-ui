@@ -3,7 +3,7 @@ import "./styles.css"
 import Swal from "sweetalert2";
 import { getMonthDayCount } from "../../helpers/date-helper";
 import Api from "../../Api";
-import { DailyGoal, Goal } from "../../types";
+import { DailyValue, Goal } from "../../types";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/auth-context";
 
@@ -48,15 +48,17 @@ export default function Header(props: Props) {
                     return null;
                 }
 
-                var date = new Date().toJSON().substring(0, 7);
-
-                await Api.SetGoal({
+                const result = await Api.SetGoal({
                     user_id: user.id,
                     silver: Number(data.silver),
                     gold: Number(data.gold),
                     diamond: Number(data.diamond),
-                    date: date
+                    date: new Date().toJSON().substring(0, 7)
                 } as Goal);
+                if (!result) {
+                    Swal.showValidationMessage("Não foi possível setar sua meta no momento, realize um novo login e tente novamente!");
+                    return null;
+                }
 
                 await Swal.fire({
                     title: "Metas do mês ajustadas com sucesso!",
@@ -100,11 +102,15 @@ export default function Header(props: Props) {
                     return null;
                 }
 
-                await Api.SetDailyGoal({
+                const result = await Api.SetDailyValue({
                     user_id: user.id,
                     value: Number(data.value),
                     date: new Date(data.date)
-                } as DailyGoal);
+                } as DailyValue);
+                if (!result) {
+                    Swal.showValidationMessage("Não foi possível realizar o lançamento no momento, realize um novo login e tente novamente!");
+                    return null;
+                }
 
                 await Swal.fire({
                     title: "Lançamento realizado com sucesso!",

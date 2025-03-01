@@ -17,9 +17,9 @@ export default function Home() {
     const { user } = useAuth();
     const [totalWeekValue, setTotalWeekValue] = useState(0);
     const [totalMonthValue, setTotalMonthValue] = useState(0);
-    const [mainGoal, setMainGoal] = useState<Goal>(null);
-    const [weeklyGoals, setWeeklyGoals] = useState([]);
-    const [monthlyGoals, setMonthlyGoals] = useState([]);
+    const [goal, setGoal] = useState<Goal>(null);
+    const [weeklyValues, setWeeklyValues] = useState([]);
+    const [monthlyValues, setMonthlyValues] = useState([]);
     const [bestDay, setBestDay] = useState(null);
     const [activeKnob, setActiveKnob] = useState("silver");
     const [loading, setLoading] = useState(false);
@@ -30,33 +30,35 @@ export default function Home() {
     }, []);
 
     async function GetGoalData() {
-        if(!user)
+        if (!user)
             return;
 
-        setLoading(true);  
-        var result = await Api.GetMainGoals(user.id);
+        setLoading(true);
+        var result = await Api.GetGoals();
         if (!result) {
             setLoading(false);
             return;
         }
 
-        setMainGoal(result);
+        setGoal(result);
 
-        var weekGoals = await Api.GetWeekGoals(user.id);
-        setWeeklyGoals(weekGoals);
-
-        let totalWeekValue = weekGoals.map(item => item.value).reduce((prev, next) => prev + next);
-        setTotalWeekValue(totalWeekValue);
-
-        var monthGoals = await Api.GetMonthGoals(user.id);
-        setMonthlyGoals(monthGoals);
-
-        let totalMonthValue = monthGoals.map(item => item.value).reduce((prev, next) => prev + next);
-        setTotalMonthValue(totalMonthValue);
+        var values = await Api.GetValues();
+        setWeeklyValues(values.weekly);
+        setMonthlyValues(values.monthly);
 
         let bestDay = { value: 0 };
-        monthGoals.forEach((item) => bestDay = item.value > bestDay.value ? item : bestDay);
+        values.monthly.forEach((item) => bestDay = item.value > bestDay.value ? item : bestDay);
         setBestDay(bestDay);
+
+        if (values.weekly.length > 0) {
+            let totalWeekValue = values.weekly.map(item => item.value).reduce((prev, next) => prev + next);
+            setTotalWeekValue(totalWeekValue);
+        }
+
+        if (values.monthly.length > 0) {
+            let totalMonthValue = values.monthly.map(item => item.value).reduce((prev, next) => prev + next);
+            setTotalMonthValue(totalMonthValue);
+        }
 
         setLoading(false);
     }
@@ -64,14 +66,14 @@ export default function Home() {
     return (
         <div className="container">
             <Loading show={loading} />
-            <Header callback={()=> GetGoalData()} />
+            <Header callback={() => GetGoalData()} />
             <div className="knob-chart">
                 <KnobButtons activeKnob={activeKnob} setActiveKnob={(value) => setActiveKnob(value)} />
                 <div>
                     {activeKnob === "silver" &&
                         <Knob
                             id="silver"
-                            goalValue={mainGoal?.silver}
+                            goalValue={goal?.silver}
                             sellingValue={totalMonthValue}
                             color="#afafaf"
                         />
@@ -79,7 +81,7 @@ export default function Home() {
                     {activeKnob === "gold" &&
                         <Knob
                             id="gold"
-                            goalValue={mainGoal?.gold}
+                            goalValue={goal?.gold}
                             sellingValue={totalMonthValue}
                             color="#ff9b00"
                         />
@@ -87,7 +89,7 @@ export default function Home() {
                     {activeKnob === "diamond" &&
                         <Knob
                             id="diamond"
-                            goalValue={mainGoal?.diamond}
+                            goalValue={goal?.diamond}
                             sellingValue={totalMonthValue}
                             color="#7adae3"
                         />
@@ -95,10 +97,10 @@ export default function Home() {
                 </div>
             </div>
             <section>
-                <WeeklyChart goals={weeklyGoals} total={totalWeekValue} />
-                <InlineCards goal={mainGoal} />
+                <WeeklyChart values={weeklyValues} total={totalWeekValue} />
+                <InlineCards goal={goal} />
                 <GeneralInfo bestDay={bestDay} />
-                <MonthlyChart goals={monthlyGoals} total={totalMonthValue} />
+                <MonthlyChart values={monthlyValues} total={totalMonthValue} />
             </section>
         </div>
     );

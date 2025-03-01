@@ -1,10 +1,10 @@
 import { Bar } from 'react-chartjs-2';
-import { DailyGoal } from '../../types';
+import { DailyValue } from '../../types';
 import Price from '../../helpers/price-helper';
 import { getMonthDayCount } from '../../helpers/date-helper';
 
 interface Props {
-    goals: DailyGoal[];
+    values: DailyValue[];
     total: number;
 }
 
@@ -21,7 +21,7 @@ export default function MonthlyChart(props: Props) {
                         labels: Array.from({ length: getMonthDayCount() }, (_, index) => index + 1),
                         datasets: [{
                             label: "Valores",
-                            data: Array.from(props.goals, (x) => x.value),
+                            data: Array.from(props.values, (x) => x.value),
                             borderWidth: 0,
                             backgroundColor: "#4ecddabf"
                         }]
