@@ -1,3 +1,5 @@
+import { DailyValue } from "../types";
+
 declare global {
     interface Date {
         addDays: (days: number) => Date;
@@ -40,8 +42,8 @@ export function getDatesOfMonth(): Date[] {
     const currentDate = new Date().toJSON().substring(0, 7);
     const monthDayCount = getMonthDayCount();
     const initialDate = new Date(`${currentDate}-01 00:00:00`);
-    const finalDate = new Date(`${currentDate}-${monthDayCount < 10 ? `0${monthDayCount}`: monthDayCount} 00:00:00`);
-    
+    const finalDate = new Date(`${currentDate}-${monthDayCount < 10 ? `0${monthDayCount}` : monthDayCount} 00:00:00`);
+
     return getDatesBetweenRange(initialDate, finalDate);
 }
 
@@ -54,4 +56,24 @@ export function getDatesBetweenRange(firstWeekDay: Date, lastWeekDay: Date): Dat
     }
 
     return dateArray;
+}
+
+export function getWeek(date: Date) {
+    const day = date.getDate();
+    return Math.floor((day - 1) / 7);
+}
+
+export function weekWithHighestValues(data: DailyValue[]) {
+    let weeks = [0, 0, 0, 0, 0];
+
+    data.forEach(item => {
+        const date = new Date(item.date);
+        const week = getWeek(date);
+        if (week >= 0 && week < weeks.length) {
+            weeks[week] += item.value;
+        }
+    });
+
+    let weekWithHighestSales = weeks.indexOf(Math.max(...weeks));
+    return weekWithHighestSales + 1;
 }

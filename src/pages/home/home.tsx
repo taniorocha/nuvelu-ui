@@ -35,21 +35,17 @@ export default function Home() {
 
         setLoading(true);
         var result = await Api.GetGoals();
-        if (!result) {
-            setLoading(false);
-            return;
-        }
-
-        setGoal(result);
+        if (result)
+            setGoal(result);
 
         var values = await Api.GetValues();
         setWeeklyValues(values.weekly);
         setMonthlyValues(values.monthly);
 
-        let bestDay = { value: 0 };
-        values.monthly.forEach((item) => bestDay = item.value > bestDay.value ? item : bestDay);
-        setBestDay(bestDay);
-
+        let bestValue = { value: 0 };
+        values.monthly.forEach((item) => bestValue = item.value > bestValue.value ? item : bestValue);
+        setBestDay(bestValue);
+        
         if (values.weekly.length > 0) {
             let totalWeekValue = values.weekly.map(item => item.value).reduce((prev, next) => prev + next);
             setTotalWeekValue(totalWeekValue);
@@ -99,7 +95,7 @@ export default function Home() {
             <section>
                 <WeeklyChart values={weeklyValues} total={totalWeekValue} />
                 <InlineCards goal={goal} />
-                <GeneralInfo bestDay={bestDay} />
+                <GeneralInfo bestDay={bestDay} monthlyValues={monthlyValues} />
                 <MonthlyChart values={monthlyValues} total={totalMonthValue} />
             </section>
         </div>
