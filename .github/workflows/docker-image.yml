@@ -17,4 +17,4 @@ jobs:
       - name: Build and Push Docker image     
         if: success()
         run: |
-          docker build -t tnioa/nuvelu-ui:1.0.${{ github.run_number }} --output type=image,push=true .
+          docker buildx build --platform linux/amd64,linux/arm64 -t tnioa/nuvelu-ui:1.0.${{ github.run_number }} --output type=image,push=true .
