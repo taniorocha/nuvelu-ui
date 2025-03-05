@@ -78,6 +78,8 @@ header {
     width: 100%;
     max-width: 60px;
     height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .user-cover img {
