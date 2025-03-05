@@ -8,6 +8,11 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+        
+      - name: Set up Docker Buildx      
+        uses: crazy-max/ghaction-docker-buildx@v1      
+        with:        
+          version: latest
 
       - name: Login to DockerHub
         if: success()
