@@ -23,6 +23,20 @@ export function getMonthDayCount() {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 }
 
+export function getMonthDayCountExceptSundays() { 
+    var date = new Date();
+    let days_in_month = getMonthDayCount();
+    let days_are_not_sunday = 0;
+
+    for (let day = 1; day <= days_in_month; day++) {
+        let date_aux = new Date(date.getFullYear(), date.getMonth(), day);
+        if (date_aux.getDay() !== 0)
+            days_are_not_sunday++;
+    }
+
+    return days_are_not_sunday;
+}
+
 export function getDatesOfWeek(): Date[] {
     const currentDate = new Date();
     const currentWeekDay = currentDate.getDay(); // 0 to 6

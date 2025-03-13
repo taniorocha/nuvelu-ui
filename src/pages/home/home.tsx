@@ -47,12 +47,12 @@ export default function Home() {
         setBestDay(bestValue);
         
         if (values.weekly.length > 0) {
-            let totalWeekValue = values.weekly.map(item => item.value).reduce((prev, next) => prev + next);
+            let totalWeekValue = values.weekly.map(item => item.value).reduce((prev, next) => prev + next, 0);
             setTotalWeekValue(totalWeekValue);
         }
 
         if (values.monthly.length > 0) {
-            let totalMonthValue = values.monthly.map(item => item.value).reduce((prev, next) => prev + next);
+            let totalMonthValue = values.monthly.map(item => item.value).reduce((prev, next) => prev + next, 0);
             setTotalMonthValue(totalMonthValue);
         }
 

@@ -15,7 +15,7 @@ export default function Login() {
 
     async function handleLogin() {
         setLoginErrorMessage('');
-        if(!username || !password){
+        if (!username || !password) {
             setLoginErrorMessage("Preencha os campos para fazer login!");
             return;
         }

@@ -5,7 +5,15 @@
     justify-content: center;
     align-items: center;
     background: #202d36;
+    max-width: 500px;
+    max-height: 1000px;
 }
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
 
 .login-content {
     width: 100%;
@@ -85,4 +93,5 @@
     background: #7adae3;
     color: #202d36;
     bottom: 30px;
+    max-width: 460px;
 }

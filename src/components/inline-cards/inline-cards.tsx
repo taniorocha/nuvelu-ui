@@ -1,6 +1,7 @@
+import { getMonthDayCountExceptSundays } from "../../helpers/date-helper";
 import Price from "../../helpers/price-helper";
 import { Goal } from "../../types";
-import "./styles.css"
+import "./styles.css";
 
 interface Props {
     goal: Goal
@@ -8,8 +9,7 @@ interface Props {
 
 export default function InlineCards(props: Props) {
     function getMidDailyValue(goalValue: number) {
-        const date = new Date();
-        const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+        const daysInMonth = getMonthDayCountExceptSundays();
         return goalValue / daysInMonth;
     }
 

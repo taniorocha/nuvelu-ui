@@ -1,0 +1,8 @@
+.general-info {
+    padding: 0 5px;
+}
+
+.general-info-item {
+    display: flex;
+    justify-content: space-between;
+}
