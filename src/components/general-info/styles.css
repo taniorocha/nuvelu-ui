@@ -6,3 +6,7 @@
     display: flex;
     justify-content: space-between;
 }
+
+.general-info-item span:nth-child(2) {
+    color: #8f8f8f;
+}

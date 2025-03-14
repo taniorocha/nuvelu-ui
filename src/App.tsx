@@ -8,6 +8,12 @@ import Preload from './pages/preload/preload';
 import { AuthProvider } from './contexts/auth-context';
 ChartJS.register(...registerables);
 
+declare global {
+    interface Window {
+        JSConfetti?: any;
+    }
+}
+
 export default function App() {
     return (
         <AuthProvider>

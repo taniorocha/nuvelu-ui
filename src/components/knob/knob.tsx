@@ -15,7 +15,7 @@ export default function Knob(props: Props) {
         let value = (props.sellingValue * 100) / props.goalValue;
         setValue(value);
         updateKnob();
-    }, [props.sellingValue, value]);
+    }, [props.goalValue, props.sellingValue, value]);
 
     function updateKnob() {
         const range = document.getElementById(`range-${props.id}`);

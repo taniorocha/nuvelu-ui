@@ -35,7 +35,7 @@ async function registerServiceWorker() {
                 { scope: "./" }
             );
 
-            console.log("Registration done");
+            console.log("Service worker registration done");
             return registration;
         } catch (error) {
             console.error(`Registration failed with ${error}`);

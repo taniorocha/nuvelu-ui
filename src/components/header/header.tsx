@@ -27,9 +27,9 @@ export default function Header(props: Props) {
         await Swal.fire({
             title: "Ajuste de metas do mês",
             html: `
-              <input id="swal-input1" class="swal2-input" type="number" pattern="\d*" placeholder="Meta prata">
-              <input id="swal-input2" class="swal2-input" type="number" pattern="\d*" placeholder="Meta ouro">
-              <input id="swal-input3" class="swal2-input" type="number" pattern="\d*" placeholder="Meta diamante">
+              <input id="swal-input1" class="swal2-input" type="number" placeholder="Meta prata">
+              <input id="swal-input2" class="swal2-input" type="number" placeholder="Meta ouro">
+              <input id="swal-input3" class="swal2-input" type="number" placeholder="Meta diamante">
             `,
             showCancelButton: true,
             cancelButtonText: "Cancelar",
@@ -84,7 +84,7 @@ export default function Header(props: Props) {
                 `<option value="${x.toJSON()}" ${x.getDate() === currentDay ? "selected" : ""}>${maskDate(x)}</option>`
             )}
               </select>
-              <input id="swal-input" class="swal2-input" type="number" pattern="\d*" placeholder="Valor vendido">
+              <input id="swal-input" class="swal2-input" type="number" placeholder="Valor vendido">
             `,
             showCancelButton: true,
             cancelButtonText: "Cancelar",
@@ -143,6 +143,26 @@ export default function Header(props: Props) {
         navigate("/login");
     }
 
+    async function getNotificationPermission() {
+        if (!window.Notification)
+            return false;
+    
+        const permission = await window.Notification.requestPermission()
+        alert(`Your permission: ${permission}`);
+        if (permission !== "granted")
+            return false;
+    
+        new window.Notification(
+            "NuveLu | Análise de Meta",
+            {
+                body: "Oba! Agora a ovelhinha pode te avisar sobre suas metas por aqui!",
+                icon: "https://nuvelu.taniorocha.com.br/favicon.png"
+            }
+        );
+    
+        return true;
+    }
+
     return (
         <header>
             {menuActive &&
@@ -193,7 +213,7 @@ export default function Header(props: Props) {
                                 </button>
                             </li>
                             <li>
-                                <button>
+                                <button onClick={() => getNotificationPermission()}>
                                     <span className="material-symbols-outlined">notifications</span>
                                     Notificações
                                 </button>
