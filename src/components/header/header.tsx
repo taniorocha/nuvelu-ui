@@ -6,6 +6,7 @@ import Api from "../../Api";
 import { DailyValue, Goal } from "../../types";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/auth-context";
+import { getNotificationPermissionStatus, requestNotificationPermission } from "../../helpers/notification-helper";
 
 interface Props {
     callback(): void;
@@ -143,24 +144,75 @@ export default function Header(props: Props) {
         navigate("/login");
     }
 
-    async function getNotificationPermission() {
-        if (!window.Notification)
-            return false;
-    
-        const permission = await window.Notification.requestPermission()
-        alert(`Your permission: ${permission}`);
-        if (permission !== "granted")
-            return false;
-    
-        new window.Notification(
-            "NuveLu | Análise de Meta",
-            {
-                body: "Oba! Agora a ovelhinha pode te avisar sobre suas metas por aqui!",
-                icon: "https://nuvelu.taniorocha.com.br/favicon.png"
+    async function handleNotificationPermission() {
+        handleSetMenuStatus(false);
+
+        const permissionStatus = getNotificationPermissionStatus();
+        if (!permissionStatus) {
+            await Swal.fire({
+                title: "Não é possível enviar notificações para este dispositivo!",
+                icon: "info",
+                draggable: true
+            });
+
+            return;
+        }
+
+        if (permissionStatus === "denied") {
+            await Swal.fire({
+                title: "As notificações foram desativadas pelo usuário!",
+                icon: "info",
+                draggable: true
+            });
+
+            return;
+        }
+
+        if (permissionStatus === "granted") {
+            await Swal.fire({
+                title: "As notificações estão ativas!",
+                icon: "success",
+                draggable: true
+            });
+
+            return;
+        }
+
+        await Swal.fire({
+            title: "Ativação de notificação",
+            text: "Deseja ativar as notificações do app?",
+            icon: "question",
+            showCancelButton: true,
+            cancelButtonText: "Não",
+            confirmButtonColor: "#7adae3",
+            confirmButtonText: "Sim",
+            preConfirm: async () => {
+                const permission = await requestNotificationPermission()
+                if (!permission) {
+                    await Swal.fire({
+                        title: "Notificações desativadas pelo usuário!",
+                        icon: "info",
+                        draggable: true
+                    });
+
+                    return;
+                }
+
+                new window.Notification(
+                    "NuveLu | Análise de Meta",
+                    {
+                        body: "Oba! Agora a ovelhinha pode te avisar sobre suas metas por aqui!",
+                        icon: "https://nuvelu.taniorocha.com.br/favicon.png"
+                    }
+                );
+
+                await Swal.fire({
+                    title: "Notificações ativadas com sucesso!",
+                    icon: "success",
+                    draggable: true
+                });
             }
-        );
-    
-        return true;
+        });
     }
 
     return (
@@ -213,7 +265,7 @@ export default function Header(props: Props) {
                                 </button>
                             </li>
                             <li>
-                                <button onClick={() => getNotificationPermission()}>
+                                <button onClick={() => handleNotificationPermission()}>
                                     <span className="material-symbols-outlined">notifications</span>
                                     Notificações
                                 </button>

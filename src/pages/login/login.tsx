@@ -30,7 +30,7 @@ export default function Login() {
 
         setAuth(result.token);
         setLoading(false);
-        navigate("/home");
+        navigate("/home", { replace: true });
     }
 
     return (

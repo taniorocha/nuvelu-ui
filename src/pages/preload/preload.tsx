@@ -25,7 +25,7 @@ export default function Preload() {
             navigate("/login", { replace: true });
             return;
         }
-  
+
         setAuth(token);
         setLoginChecked(true);
         navigate("/home", { replace: true });

@@ -12,6 +12,8 @@ import GeneralInfo from '../../components/general-info/general-info';
 import { useAuth } from '../../contexts/auth-context';
 import Loading from '../../components/loading/loading';
 import Swal from 'sweetalert2';
+import { getNotificationPermissionStatus, registerServiceWorker } from '../../helpers/notification-helper';
+import { SERVICE_WORKER_REGIST_PUBLIC_KEY } from '../../constanst';
 
 ChartJS.register(...registerables);
 
@@ -29,6 +31,7 @@ export default function Home() {
     useEffect(() => {
         document.querySelector("body").style.overflow = "";
         GetGoalData();
+        handleWorkerService();
     }, []);
 
     async function GetGoalData() {
@@ -121,9 +124,9 @@ export default function Home() {
             showGoalAchievedMessage(
                 "💎 UAU! Você é Diamante!",
                 "Esse é o topo da excelência! Poucos chegam aqui, e você é um deles! Agora é hora de comemorar e se preparar para novos desafios ainda maiores. Você é simplesmente incrível! 🚀🎇",
-                "/images/goal-img.png"
+                "/images/diamond-goal.jpg"
             );
-            
+
             return;
         }
 
@@ -131,9 +134,9 @@ export default function Home() {
             showGoalAchievedMessage(
                 "🏆 Você é Ouro!",
                 "Isso sim é determinação! Seu esforço e compromisso trouxeram você até aqui, e essa vitória é toda sua. Continue brilhando! 💛🎊",
-                "/images/goal-img.png"
+                "/images/gold-goal.jpg"
             );
-            
+
             return;
         }
 
@@ -141,11 +144,28 @@ export default function Home() {
             showGoalAchievedMessage(
                 "🎉 Você é Prata!",
                 "Parabéns pelo esforço e dedicação. Celebre essa conquista e continue avançando o próximo nível está logo ali! 🚀✨",
-                "/images/goal-img.png"
+                "/images/silver-goal.jpg"
             );
 
             return;
         }
+    }
+
+    async function handleWorkerService() {
+        const notificationPermission = getNotificationPermissionStatus();
+        if (notificationPermission !== "granted")
+            return;
+
+        var registration = await registerServiceWorker();
+        if (!registration)
+            return;
+
+        var subscription = await registration.pushManager.subscribe({
+            applicationServerKey: SERVICE_WORKER_REGIST_PUBLIC_KEY,
+            userVisibleOnly: true
+        });
+
+        await Api.SetPushSubscription(subscription);
     }
 
     return (

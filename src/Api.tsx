@@ -94,4 +94,15 @@ export default new class Api {
             body: JSON.stringify(dailyValue)
         }).then(x => x.status === 200 || x.status === 201 ? true : false);
     }
+
+    async SetPushSubscription(pushSubscription: PushSubscription) {
+        return await fetch(`${URL_API}/pushsubscription`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)
+            },
+            body: JSON.stringify(pushSubscription)
+        }).then(x => x.status === 200 || x.status === 201 ? true : false);
+    }
 }
