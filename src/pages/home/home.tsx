@@ -165,7 +165,10 @@ export default function Home() {
             userVisibleOnly: true
         });
 
-        await Api.SetPushSubscription(subscription);
+        await Api.SetPushSubscription({
+            user_id: user.id,
+            subscription: JSON.stringify(subscription)
+        });
     }
 
     return (

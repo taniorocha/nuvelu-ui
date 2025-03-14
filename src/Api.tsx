@@ -1,6 +1,6 @@
 import { LOCAL_STORAGE_TOKEN_NAME, URL_API } from './constanst';
 import { getDatesOfMonth, getDatesOfWeek } from './helpers/date-helper';
-import { DailyValue, Goal, ValueResult } from './types';
+import { DailyValue, Goal, ValueResult, PushSubscription } from './types';
 
 export default new class Api {
     async Login(username: string, password: string) {

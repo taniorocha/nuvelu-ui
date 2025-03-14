@@ -22,6 +22,11 @@ export interface User {
     cover: string;
 }
 
+export interface PushSubscription {
+    user_id: string;
+    subscription: string;
+}
+
 export interface ValueResult {
     monthly: DailyValue[];
     weekly: DailyValue[];
