@@ -6,6 +6,7 @@ import Home from './pages/home/home';
 import Login from './pages/login/login';
 import Preload from './pages/preload/preload';
 import { AuthProvider } from './contexts/auth-context';
+import { ThemeProvider } from './contexts/theme-context';
 ChartJS.register(...registerables);
 
 declare global {
@@ -17,14 +18,16 @@ declare global {
 export default function App() {
     return (
         <AuthProvider>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Preload />}>
-                        <Route path="login" element={<Login />} />
-                        <Route path="home" element={<Home />} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
+            <ThemeProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Preload />}>
+                            <Route path="login" element={<Login />} />
+                            <Route path="home" element={<Home />} />
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+            </ThemeProvider>
         </AuthProvider>
     );
 }

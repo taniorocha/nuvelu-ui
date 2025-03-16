@@ -17,7 +17,7 @@ export default function WeeklyChart(props: Props) {
                 </span>
                 <Bar
                     data={{
-                        labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
+                        labels: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
                         datasets: [{
                             label: "Valores",
                             data: Array.from(props.values, (x) => x.value),

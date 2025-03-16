@@ -1,20 +1,22 @@
 import { useState } from "react";
 import "./styles.css"
 import Swal from "sweetalert2";
-import { getMonthDayCount } from "../../helpers/date-helper";
+import { getMonthDayCount, maskDate } from "../../helpers/date-helper";
 import Api from "../../Api";
 import { DailyValue, Goal } from "../../types";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/auth-context";
 import { getNotificationPermissionStatus, requestNotificationPermission } from "../../helpers/notification-helper";
+import { useTheme } from "../../contexts/theme-context";
 
 interface Props {
     callback(): void;
 }
 
 export default function Header(props: Props) {
-    const { user, setAuth } = useAuth();
+    const { getTheme, setTheme } = useTheme();
     const navigate = useNavigate();
+    const { user, setAuth } = useAuth();
     const [menuActive, setMenuActive] = useState(false);
 
     function handleSetMenuStatus(value: boolean) {
@@ -132,18 +134,6 @@ export default function Header(props: Props) {
         );
     }
 
-    function maskDate(date: Date) {
-        var day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-        var month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-
-        return `${day}/${month}`;
-    }
-
-    function handleLogout(): void {
-        setAuth(null);
-        navigate("/login");
-    }
-
     async function handleNotificationPermission() {
         handleSetMenuStatus(false);
 
@@ -215,6 +205,46 @@ export default function Header(props: Props) {
         });
     }
 
+    async function handleThemeColor() {
+        handleSetMenuStatus(false);
+
+        const currentTheme = getTheme();
+        await Swal.fire({
+            title: "Selecione o tema desejado",
+            html: `
+                <div class="swal2-radio" style="display: flex; margin: 0; font-size: 15px;">
+                    <label style="display: flex; align-items: center;">
+                        <input type="radio" name="swal2-radio" value="light" ${currentTheme === "light" ? "checked=true" : ""}>
+                        <span class="swal2-label" style="color: #575757;">Claro</span>
+                    </label>
+                    <label style="display: flex; align-items: center;">
+                        <input type="radio" name="swal2-radio" value="dark" ${currentTheme === "dark" ? "checked=true" : ""}>
+                        <span class="swal2-label" style="color: #575757;">Escuro</span>
+                    </label>
+                </div>
+            `,
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: "#7adae3",
+            confirmButtonText: "Salvar",
+            preConfirm: async () => {
+                const value = (document.querySelector('input[name=swal2-radio]:checked') as HTMLInputElement)?.value;
+                if (!value) {
+                    Swal.showValidationMessage("Necessário escolher ao menos uma opção!");
+                    return;
+                }
+
+                setTheme(value);
+                window.location.href = "/";
+            }
+        });
+    }
+
+    function handleLogout(): void {
+        setAuth(null);
+        navigate("/login");
+    }
+
     return (
         <header>
             {menuActive &&
@@ -271,7 +301,7 @@ export default function Header(props: Props) {
                                 </button>
                             </li>
                             <li>
-                                <button>
+                                <button onClick={() => handleThemeColor()}>
                                     <span className="material-symbols-outlined">manufacturing</span>
                                     Configurações
                                 </button>

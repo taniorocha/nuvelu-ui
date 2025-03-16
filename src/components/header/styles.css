@@ -54,9 +54,9 @@ header {
     top: 0;
     width: 80%;
     height: 100%;
-    background: #fff;
+    color: var(--header-text-color);
+    background: var(--header-background);
     z-index: 99999;
-    border: 1px #f5f5f5 solid;
     box-shadow: 2px 0px 6px 0px #00000040;
     padding: 20px 10px;
 }

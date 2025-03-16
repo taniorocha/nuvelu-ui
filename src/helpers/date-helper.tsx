@@ -18,6 +18,13 @@ Date.prototype.onlyDate = function () {
     return new Date(`${date.toJSON().substring(0, 10)} 00:00:00`);
 }
 
+export function maskDate(date: Date) {
+    var day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+    var month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+
+    return `${day}/${month}`;
+}
+
 export function getMonthDayCount() {
     var date = new Date();
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -43,11 +50,11 @@ export function getDatesOfWeek(): Date[] {
 
     // Calcula a diferença de dias para o início da semana (segunda-feira)
     const firstWeekDay = new Date(`${currentDate.toJSON().substring(0, 7)} 00:00:00`);
-    firstWeekDay.setDate(currentDate.getDate() - currentWeekDay + 1); // Ajusta para segunda-feira
+    firstWeekDay.setDate(currentDate.getDate() - currentWeekDay); // Ajusta para domingo
 
     // Calcula o fim da semana (domingo)
     const lastWeekDay = new Date(firstWeekDay);
-    lastWeekDay.setDate(firstWeekDay.getDate() + 6); // Ajusta para domingo
+    lastWeekDay.setDate(firstWeekDay.getDate() + 6); // Ajusta para sábado
 
     return getDatesBetweenRange(firstWeekDay, lastWeekDay);
 }
