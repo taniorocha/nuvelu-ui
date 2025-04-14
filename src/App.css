@@ -3,7 +3,7 @@
   --text-color: #616161;
   --header-background: #fff;
   --header-text-color: #616161;
-  --card-background: #fff; 
+  --card-background: #fff;
   --knob-text-color: #575757;
 }
 
@@ -32,7 +32,7 @@ body {
 }
 
 .swal2-loader {
-  border-color: #7adae3 rgba(0,0,0,0) #7adae3 rgba(0,0,0,0);
+  border-color: #7adae3 rgba(0, 0, 0, 0) #7adae3 rgba(0, 0, 0, 0);
 }
 
 .swal2-select option {
@@ -93,4 +93,32 @@ section {
 svg {
   border-radius: 50%;
   box-shadow: 2px 2px 8px 1px #00000059;
+}
+
+input[type='radio']:after {
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+  top: -2px;
+  left: -1px;
+  position: relative;
+  background-color: #d1d3d1;
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  border: 2px solid white;
+}
+
+input[type='radio']:checked:after {
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+  top: -2px;
+  left: -1px;
+  position: relative;
+  background-color: #7adae3;
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  border: 2px solid white;
 }
