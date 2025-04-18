@@ -7,6 +7,7 @@ import Login from './pages/login/login';
 import Preload from './pages/preload/preload';
 import { AuthProvider } from './contexts/auth-context';
 import { ThemeProvider } from './contexts/theme-context';
+import SignIn from './pages/signin/signin';
 ChartJS.register(...registerables);
 
 declare global {
@@ -23,6 +24,7 @@ export default function App() {
                     <Routes>
                         <Route path="/" element={<Preload />}>
                             <Route path="login" element={<Login />} />
+                            <Route path="signin" element={<SignIn />} />
                             <Route path="home" element={<Home />} />
                         </Route>
                     </Routes>

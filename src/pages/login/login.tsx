@@ -2,7 +2,7 @@ import "./styles.css";
 import { useState } from "react";
 import Api from "../../Api";
 import { useAuth } from "../../contexts/auth-context";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
     const { setAuth } = useAuth();
@@ -61,9 +61,15 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <span>{loginErrorMessage}</span>
-                    <button onClick={() => handleLogin()} disabled={loading}>
-                        {loading ? "Carregando..." : "Entrar"}
-                    </button>
+                    <div className="form-bottom">
+                        <span className="signin-redirector">
+                            Ainda não tem uma conta?
+                            <Link to="/signin"> Cadastrar</Link>
+                        </span>
+                        <button onClick={() => handleLogin()} disabled={loading}>
+                            {loading ? "Carregando..." : "Entrar"}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

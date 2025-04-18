@@ -1,3 +1,10 @@
+export interface SigninRequest {
+    name: string;
+    username: string;
+    password: string;
+    cover: string;
+}
+
 export interface Goal {
     id: string;
     user_id: string;

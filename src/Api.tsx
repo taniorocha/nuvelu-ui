@@ -1,8 +1,18 @@
 import { LOCAL_STORAGE_TOKEN_NAME, URL_API } from './constanst';
 import { getDatesOfMonth, getDatesOfWeek } from './helpers/date-helper';
-import { DailyValue, Goal, ValueResult, PushSubscription } from './types';
+import { DailyValue, Goal, ValueResult, PushSubscription, SigninRequest } from './types';
 
 export default new class Api {
+    async Signin(data: SigninRequest) {
+        return await fetch(`${URL_API}/users`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        }).then(x => x.status === 201 ? true : false);
+    }
+
     async Login(username: string, password: string) {
         return await fetch(`${URL_API}/users/login`, {
             method: "POST",
