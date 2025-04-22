@@ -61,16 +61,16 @@
 .login-form input {
     height: 55px;
     border-radius: 8px;
-    border: 1px #568589 solid;
+    border: none;
     padding: 15px;
     font-size: 20px;
-    background: #202d36;
+    background: #374854;
     color: #fff;
     margin-top: 15px;
 }
 
 .login-form input::placeholder {
-    color: #568589;
+    color: #8caeb1;
 }
 
 .login-form span {
