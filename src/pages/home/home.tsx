@@ -42,9 +42,9 @@ export default function Home() {
         const lastTotalMonthValue = totalMonthValue;
 
         setLoading(true);
-        var result = await Api.GetGoals();
-        if (result)
-            setGoal(result);
+        var goalResult = await Api.GetGoals();
+        if (goalResult)
+            setGoal(goalResult);
 
         var values = await Api.GetValues();
         setWeeklyValues(values.weekly);
@@ -62,12 +62,19 @@ export default function Home() {
         if (values.monthly.length > 0) {
             let totalMonthValue = values.monthly.map(item => item.value).reduce((prev, next) => prev + next, 0);
             setTotalMonthValue(totalMonthValue);
+            handleActiveKnob(goalResult, totalMonthValue);
 
             if (needToCheckGoalAchieved)
-                await checkGoalAchieved(lastTotalMonthValue, totalMonthValue);
+                await checkGoalAchieved(goalResult, lastTotalMonthValue, totalMonthValue);
         }
 
         setLoading(false);
+    }
+
+    function handleActiveKnob(goal: Goal, totalMonthValue: number) {
+        let achievedGoals = getAchievedGoals(goal, totalMonthValue)
+        let activeKnobRef = achievedGoals.length > 0 ? achievedGoals[achievedGoals.length - 1] : "silver";
+        setActiveKnob(activeKnobRef);
     }
 
     async function confetti() {
@@ -79,16 +86,16 @@ export default function Home() {
         canvas.style.display = "none";
     }
 
-    function getAchievedGoals(value: number) {
+    function getAchievedGoals(goal: Goal, value: number) {
         let achievedGoals = [];
 
-        if (value >= goal.silver)
+        if (value >= goal?.silver)
             achievedGoals.push("silver");
 
-        if (value >= goal.gold)
+        if (value >= goal?.gold)
             achievedGoals.push("gold");
 
-        if (value >= goal.diamond)
+        if (value >= goal?.diamond)
             achievedGoals.push("diamond");
 
         return achievedGoals;
@@ -113,12 +120,12 @@ export default function Home() {
         });
     }
 
-    async function checkGoalAchieved(lastTotalMonthValue: number, currentTotalMonthValue: number) {
+    async function checkGoalAchieved(goal: Goal, lastTotalMonthValue: number, currentTotalMonthValue: number) {
         if (lastTotalMonthValue === currentTotalMonthValue)
             return;
 
-        const lastAchievedGoals = getAchievedGoals(lastTotalMonthValue);
-        const currentAchievedGoals = getAchievedGoals(currentTotalMonthValue);
+        const lastAchievedGoals = getAchievedGoals(goal, lastTotalMonthValue);
+        const currentAchievedGoals = getAchievedGoals(goal, currentTotalMonthValue);
 
         if (currentAchievedGoals.includes("diamond") && !lastAchievedGoals.includes("diamond")) {
             showGoalAchievedMessage(
