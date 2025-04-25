@@ -79,13 +79,13 @@ export default function Home() {
         }
 
         let activeKnobRef = achievedGoals[achievedGoals.length - 1];
-        if(activeKnobRef === "silver")
-            activeKnobRef = "gold";
+        if(activeKnobRef === "silver") {
+            setActiveKnob("gold");
+            return;    
+        }
 
         if(activeKnobRef === "gold")
-            activeKnobRef = "diamond";
-
-        setActiveKnob(activeKnobRef);
+            setActiveKnob("diamond");
     }
 
     async function confetti() {
