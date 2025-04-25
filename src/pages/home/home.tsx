@@ -73,7 +73,18 @@ export default function Home() {
 
     function handleActiveKnob(goal: Goal, totalMonthValue: number) {
         let achievedGoals = getAchievedGoals(goal, totalMonthValue)
-        let activeKnobRef = achievedGoals.length > 0 ? achievedGoals[achievedGoals.length - 1] : "silver";
+        if(achievedGoals.length === 0) {
+            setActiveKnob("silver");
+            return;
+        }
+
+        let activeKnobRef = achievedGoals[achievedGoals.length - 1];
+        if(activeKnobRef === "silver")
+            activeKnobRef = "gold";
+
+        if(activeKnobRef === "gold")
+            activeKnobRef = "diamond";
+
         setActiveKnob(activeKnobRef);
     }
 
